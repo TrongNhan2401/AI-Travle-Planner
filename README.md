@@ -32,4 +32,33 @@ dotnet run --project src/WebApi/AITravelPlanner.WebApi.csproj
 npm --prefix src/WebFrontend run dev
 ```
 
-Bốn script `scripts/check-*.ps1` trong lộ trình học chưa được tạo. Các lệnh trên chưa thay thế một bộ quality gate PA2 hoàn chỉnh; frontend và API hiện vẫn là template.
+## Quality checks trong Git Bash
+
+Bốn script `.sh` đã có nội dung. Không cần `pwsh`; chạy từng lệnh từ thư mục gốc:
+
+```bash
+bash scripts/check-format.sh
+bash scripts/check-lint.sh
+bash scripts/check-types.sh
+bash scripts/check-tests.sh
+```
+
+- Format: C# whitespace theo folder và frontend Prettier 3.9.5, đã pin trong devDependencies/lockfile.
+- Lint: C# analyzers + warnings-as-errors và Oxlint + deny-warnings.
+- Types: build C# và TypeScript, không bundle frontend.
+- Tests: chạy xUnit trong `tests/AITravelPlanner.ArchitectureTests`, xuất TRX vào `.artifacts/test-results/`, fail nếu không có project/test được thực thi hoặc có test không pass. Chưa có frontend test runner hoặc contract test endpoint.
+
+Trước khi chạy cần restore backend và `npm ci` như trên. Prettier và xUnit đã được thêm. Sáu test kiến trúc kiểm tra các khai báo ProjectReference được phép và việc Domain/Application không khai báo FrameworkReference. Chúng đọc file project thật, không gọi model, không thay thế contract test hoặc phân tích mọi phụ thuộc bắc cầu. Trạng thái kiểm chứng và giới hạn môi trường được ghi trong `AI-LOG.md`.
+
+Để sửa format C# dùng `dotnet format whitespace src --folder`; với test dùng `dotnet format whitespace tests --folder`. Với frontend dùng `npm --prefix src/WebFrontend run format:write`. Các check chỉ kiểm tra, không tự sửa. Frontend và API hiện vẫn là template.
+
+### Hiểu bộ test đầu tiên
+
+Mở `tests/AITravelPlanner.ArchitectureTests/DependencyRulesTests.cs`:
+
+- Bốn case kiểm tra project chỉ tham chiếu những tầng được phép.
+- Hai case kiểm tra Domain và Application không khai báo phụ thuộc framework web.
+- `[Theory]` chạy cùng một test với từng bộ dữ liệu `[InlineData]`; vì vậy hai phương thức tạo thành sáu case.
+- Các test tìm thư mục gốc từ vị trí assembly đang chạy, rồi đọc `.csproj`. Chạy chúng trong checkout có mã nguồn.
+
+Để học, chạy `bash scripts/check-tests.sh` và đọc kết quả 6/6. Hướng dẫn tạo vi phạm thật, thấy test đỏ rồi sửa lại nằm trong phần 7.4 của tài liệu PA2 tại `knowledge/` (thư mục này được Git ignore).

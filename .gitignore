@@ -3,6 +3,7 @@
 ##
 ## Get latest from `dotnet new gitignore`
 /knowledge/
+/.artifacts/
 # dotenv files
 .env
 .env.*

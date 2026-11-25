@@ -1,4 +1,4 @@
-﻿namespace AITravelPlanner.Infrastructure;
+namespace AITravelPlanner.Infrastructure;
 
 public class Class1
 {

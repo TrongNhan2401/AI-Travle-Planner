@@ -19,10 +19,15 @@ Chạy từ thư mục gốc. Các lệnh dưới đây dựa trên cấu hình 
 | Chạy API | `dotnet run --project src/WebApi/AITravelPlanner.WebApi.csproj` |
 | Cài dependency frontend theo lockfile | `npm --prefix src/WebFrontend ci` |
 | Lint frontend | `npm --prefix src/WebFrontend run lint` |
-| Type check và build frontend | `npm --prefix src/WebFrontend run build` |
+| Type check frontend | `npm --prefix src/WebFrontend run typecheck` |
+| Build frontend | `npm --prefix src/WebFrontend run build` |
+| Kiểm tra format | `bash scripts/check-format.sh` |
+| Kiểm tra lint | `bash scripts/check-lint.sh` |
+| Kiểm tra kiểu | `bash scripts/check-types.sh` |
+| Chạy test | `bash scripts/check-tests.sh` |
 | Chạy frontend development | `npm --prefix src/WebFrontend run dev` |
 
-- Hiện chưa có bộ test, bốn script `scripts/check-*.ps1`, formatter frontend hoặc script typecheck riêng. Kiểm tra lại repository trước mỗi công việc và cập nhật mục này khi chúng được triển khai.
+- Dùng Git Bash và bốn script `.sh`, không dùng các lệnh `.ps1` dự kiến trước đây. Prettier đã được thêm; xUnit trong `tests/AITravelPlanner.ArchitectureTests` kiểm tra khai báo phụ thuộc giữa các tầng. Chưa có contract test HTTP. Kiểm tra trạng thái kiểm chứng trong AI-LOG trước khi báo gate đã xanh.
 - Chưa coi `dotnet test` là bằng chứng test thành công nếu không có test được phát hiện và thực sự chạy.
 - **Bài học từ lỗi thực tế trong phiên học:** người dùng chạy các lệnh mẫu `scripts/check-*.ps1` khi file chưa được tạo. Trước khi hướng dẫn chạy script, kiểm tra file và phân biệt rõ lệnh hiện có với lệnh dự kiến.
 - **Bài học từ lỗi thực tế trong phiên học:** Git Bash báo `pwsh: command not found`; máy chỉ tìm thấy `powershell.exe`. Kiểm tra shell và phiên bản trước khi dùng lệnh PowerShell. Không mặc định Windows PowerShell tương thích mọi script dành cho PowerShell 7.

@@ -1,4 +1,4 @@
-﻿namespace AITravelPlanner.Application;
+namespace AITravelPlanner.Application;
 
 public class Class1
 {
