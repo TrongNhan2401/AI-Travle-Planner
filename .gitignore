@@ -5,6 +5,8 @@
 /knowledge/
 # dotenv files
 .env
+.env.*
+!.env.example
 
 # Local development configuration
 **/appsettings.Development.json
