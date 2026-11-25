@@ -1,0 +1,55 @@
+name: Quality checks
+
+on:
+  push:
+    branches:
+      - main
+      - chore/github-actions-ci
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Quality gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+
+      - name: Restore backend dependencies
+        run: dotnet restore AI_Travel_Planner.sln
+
+      - name: Install frontend dependencies
+        run: npm --prefix src/WebFrontend ci
+
+      - name: Check formatting
+        run: bash scripts/check-format.sh
+
+      - name: Check lint
+        run: bash scripts/check-lint.sh
+
+      - name: Check types
+        run: bash scripts/check-types.sh
+
+      - name: Run tests
+        run: bash scripts/check-tests.sh
